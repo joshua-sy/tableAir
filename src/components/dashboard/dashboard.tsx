@@ -26,18 +26,21 @@ export default function Dashboard() {
 
      
       <div className='flex w-1/3 pl-auto items-center justify-end'>
-          <div className='flex items-center justify-between w-44'>
-            <div className='flex items-center'>
-              <CircleHelp className='mr-2'/>
-              <div className='text-lg'>
-                Help
-              </div>
-            </div>
-            <div className='border border-gray-400 rounded-full p-2'>
-              <Bell className='h-6 w-6'/>
+        <div className='flex items-center justify-between w-60'>
+          <div className='flex items-center'>
+            <CircleHelp className='mr-2'/>
+            <div className='text-lg'>
+              Help
             </div>
           </div>
+          <div className='border border-gray-400 rounded-full p-2 mr-2'>
+              <Bell className='h-6 w-6'/>
+          </div>
+          <div className=''>
+            <UserButton />
+          </div>
         </div>
+      </div>
 
     </div>
 

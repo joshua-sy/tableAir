@@ -1,11 +1,20 @@
 import Head from "next/head";
 import Link from "next/link";
+import Image from 'next/image';
 
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  useUser
+} from '@clerk/nextjs'
 import { api } from "~/utils/api";
+import Dashboard from '~/components/dashboard/dashboard';
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
+  const user = useUser();
   return (
     <>
       <Head>
@@ -13,39 +22,30 @@ export default function Home() {
         <meta name="description" content="An AirTable clone"/>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
+      <main className="flex min-h-screen flex-col items-center justify-center">
+        <SignedIn>
+          <Dashboard />
+        </SignedIn>
+        <SignedOut>
+          <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
+            
+            <div className="flex items-center">
+              <div className='relative w-40 h-40 mr-8'>
+                <Image src="/airtable.svg" alt="Logo" layout='fill' objectFit='contain' />
               </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
+              <h1 className="text-5xl font-extrabold tracking-tight text-black sm:text-[5rem]">
+                TableAir
+              </h1>
+            </div>
+            
+            <div className="border rounded-full bg-blue-800 text-5xl p-10 w-72 text-center text-white hover:bg-blue-500">
+              <SignInButton />
+            </div>
+            <p className="text-2xl text-black">
+              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+            </p>
           </div>
-          <p className="text-2xl text-white">
-            {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-          </p>
-        </div>
+        </SignedOut>
       </main>
     </>
   );
