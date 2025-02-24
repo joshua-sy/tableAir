@@ -60,7 +60,7 @@ export const bases = createTable(
   {
     id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
     baseName: varchar("base_name", { length: 256 }).notNull(),
-    workspaceID: integer("workspace_id"),
+    workspaceID: integer("workspace_id").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
