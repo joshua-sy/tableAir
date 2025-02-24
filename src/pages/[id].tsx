@@ -1,15 +1,13 @@
-import { useRouter } from 'next/router';
 
 
 export default function idTablePage() {
-  const router = useRouter();
-  const { id } = router.query;
+
 
   return (
     <>
       <div>
         <div>
-          Table Page for ID: {id}
+          Table Page to be built
         </div>
         <div>
           Hello World
