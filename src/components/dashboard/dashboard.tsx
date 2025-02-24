@@ -1,10 +1,31 @@
-import { Menu, Bell, CircleHelp, ChevronRight } from 'lucide-react';
+import { Menu, Bell, CircleHelp, ChevronRight, Plus } from 'lucide-react';
 import SearchBar from '~/components/dashboard/searchBar';
 import Image from 'next/image';
+import { api } from '~/utils/api';
 import { UserButton } from '@clerk/clerk-react'; // Import the UserButton component from Clerk
+import WorkspaceDashboard from '~/components/dashboard/workspaceDashboard';
+import React, { useState } from 'react';
 
 
-export default function Dashboard() {
+interface DashboardProps {
+  userID: string;
+}
+
+export default function Dashboard({ userID }: DashboardProps) {
+  // const createBase = api.base.createBase.useMutation();
+  const [selectedWorkspace, setSelectedWorkspace] = useState(-1);
+  const createWorkSpace = api.workspace.createWorkSpace.useMutation();
+  const { data: workspaces, isLoading, error, refetch } = api.workspace.getWorkspacesByUserID.useQuery({ userID });
+
+  const handleCreateWorkspace = async () => {
+    try {
+      await createWorkSpace.mutateAsync({ userID, workspaceName: "Workspace" });
+      alert("Workspace created successfully!");
+      await refetch(); // Refetch the bases after creating a new one
+    } catch (error) {
+      console.error("Failed to create workspace:", error);
+    }
+  };
   return (
     <>
     <div className="w-full justify-between border-b border-gray-300 flex items-center pl-10 pr-10 pt-5 pb-3">
@@ -53,9 +74,29 @@ export default function Dashboard() {
           </div>
           <ChevronRight className='font-light h-5 w-5'/>
         </div>
+        <div>
+          <div id="workspace-container" className='flex justify-between items-center p-2'>
+            <div className='text-lg font-semibold '>
+              All workspaces
+            </div>
+            <div className='hover:bg-slate-300' onClick={handleCreateWorkspace}>
+              <Plus className='font-light h-5 w-5'/>
+            </div>
+          </div>
+          {isLoading && <div>Loading...</div>}
+            {error && <div>Error loading bases</div>}
+            {workspaces && workspaces.map((workspace) => (
+              <div key={workspace.id} className='flex justify-between items-center p-2' onClick={() => setSelectedWorkspace(workspace.id)}>
+                <div className='text-lg'>
+                  {workspace.workspaceName}
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
+
       <div id='dashboard' className='w-screen bg-slate-50'>
-        Home
+        <WorkspaceDashboard workspaceID={selectedWorkspace}/>
       </div>
     </div>
 
