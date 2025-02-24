@@ -12,15 +12,17 @@ export default function WorkspaceDashboard({ workspaceID }: WorkspaceDashboardPr
   const handleCreateBase = async () => {
     try {
       const base = await createBase.mutateAsync({ workspaceID, baseName: "Untitled Base" });
-      console.log(base);
-      console.log(base[0]);
+      if (!base[0]) {
+        throw new Error("Failed to create table");
+      }
       const table = await createTable.mutateAsync({baseID: base[0].id , tableName: "Table 1"});
       let currentUrl = window.location.href;
       currentUrl = currentUrl.substring(0, currentUrl.length - 1);
 
       console.log(currentUrl);
-      console.log(`${currentUrl}${table[0].id}`);
-      
+      if (!table[0]) {
+        throw new Error("Failed to create table");
+      }
       router.push(`${currentUrl}${table[0].id}`);
       alert("Base and Table created successfully!");
     } catch (error) {
