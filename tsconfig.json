@@ -13,6 +13,9 @@
     "strict": false,
     "noUncheckedIndexedAccess": true,
     "checkJs": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
 
     /* Bundled projects */
     "lib": ["dom", "dom.iterable", "ES2022"],
