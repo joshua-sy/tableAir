@@ -23,8 +23,7 @@ export default function WorkspaceDashboard({ workspaceID }: WorkspaceDashboardPr
       if (!table[0]) {
         throw new Error("Failed to create table");
       }
-      router.push(`${currentUrl}${table[0].id}`);
-      alert("Base and Table created successfully!");
+      await router.push(`${currentUrl}${table[0].id}`);
     } catch (error) {
       console.error("Failed to create Base and table:", error);
     }

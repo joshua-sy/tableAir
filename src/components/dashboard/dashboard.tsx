@@ -21,7 +21,7 @@ export default function Dashboard({ userID }: DashboardProps) {
     try {
       await createWorkSpace.mutateAsync({ userID, workspaceName: "Workspace" });
       alert("Workspace created successfully!");
-      refetch(); // Refetch the bases after creating a new one
+      await refetch(); // Refetch the bases after creating a new one
     } catch (error) {
       console.error("Failed to create workspace:", error);
     }
