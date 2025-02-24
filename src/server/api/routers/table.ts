@@ -21,6 +21,9 @@ export const tableRouter = createTRPCRouter({
         tableName: input.tableName,
       }).returning({id: tables.id});
       console.log(table);
+      if (!table[0]) {
+        throw new Error("Failed to create table");
+      }
       // Use the returned ID to create a new table with the specified columns
       await db.execute(sql`
         CREATE TABLE ${sql.identifier(table[0].id)} (

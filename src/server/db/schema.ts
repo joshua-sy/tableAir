@@ -76,7 +76,7 @@ export const bases = createTable(
 export const tables = createTable(
   "tables",
   {
-    id: uuid("id").notNull().primaryKey().defaultRandom(),
+    id: uuid("id").notNull().primaryKey().default(sql`uuid_generate_v4()`),
     tableName: varchar("table_name", { length: 256 }).notNull(),
     baseID: integer("base_id"),
     createdAt: timestamp("created_at", { withTimezone: true })
