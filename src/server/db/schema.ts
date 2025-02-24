@@ -8,6 +8,7 @@ import {
   pgTableCreator,
   timestamp,
   varchar,
+  uuid
 } from "drizzle-orm/pg-core";
 
 /**
@@ -16,7 +17,8 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `tableair_${name}`);
+export const createTable = pgTableCreator((name) => name);
+
 
 export const posts = createTable(
   "post",
@@ -32,5 +34,59 @@ export const posts = createTable(
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
+  })
+);
+
+export const workspaces = createTable(
+  "workspaces",
+  {
+    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+    userID: varchar("user_id", { length: 256 }).notNull(),
+    workspaceName: varchar("workspace_name", { length: 256 }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+  },
+  (workspace) => ({
+    workspaceIDIndex: index("workspace_id_idx").on(workspace.id),
+  })
+);
+
+export const bases = createTable(
+  "bases",
+  {
+    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+    baseName: varchar("base_name", { length: 256 }).notNull(),
+    workspaceID: integer("workspace_id"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+  },
+  (base) => ({
+    baseIDIndex: index("base_id_idx").on(base.id),
+  })
+);
+
+export const tables = createTable(
+  "tables",
+  {
+    id: uuid("id").notNull().primaryKey().defaultRandom(),
+    tableName: varchar("table_name", { length: 256 }).notNull(),
+    baseID: integer("base_id"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+  },
+  (table) => ({
+    tableIDIndex: index("table_id_idx").on(table.id),
   })
 );

@@ -14,7 +14,7 @@ import Dashboard from '~/components/dashboard/dashboard';
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  const user = useUser();
+  const { user } = useUser();
   return (
     <>
       <Head>
@@ -24,7 +24,7 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
         <SignedIn>
-          <Dashboard />
+          {user ? <Dashboard userID={user.id} /> : <p>Loading user...</p>}
         </SignedIn>
         <SignedOut>
           <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
