@@ -24,7 +24,7 @@ export const posts = createTable(
   "post",
   {
     id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-    name: varchar("name", { length: 256 }),
+    name: varchar("name", { length: 256 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -58,7 +58,7 @@ export const workspaces = createTable(
 export const bases = createTable(
   "bases",
   {
-    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+    id: integer("id").notNull().primaryKey().generatedByDefaultAsIdentity(),
     baseName: varchar("base_name", { length: 256 }).notNull(),
     workspaceID: integer("workspace_id").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
